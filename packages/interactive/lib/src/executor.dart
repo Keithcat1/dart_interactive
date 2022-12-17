@@ -76,7 +76,7 @@ class Executor {
     final report = await vm.vmService.reloadSources(workspaceIsolate.isolateId);
     if (report.success != true) {
       log.warning(
-          'Error: Hot reload failed, maybe because code has syntax error?');
+          'Error: ${report.json?['notices'][0]['message']}');
       return;
     }
 
