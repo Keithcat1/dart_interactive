@@ -75,8 +75,8 @@ class Executor {
     log.info('Phase: ReloadSources');
     final report = await vm.vmService.reloadSources(workspaceIsolate.isolateId);
     if (report.success != true) {
-      log.warning(
-          'Error: ${report.json?['notices'][0]['message']}');
+
+        print(report.json?['notices'][0]['message']);
       return;
     }
 
@@ -95,7 +95,7 @@ class Executor {
         writer(responseString);
       }
     } else if (response is ErrorRef) {
-      log.warning('Error: $response');
+      print(response);
     } else {
       log.warning('Unknown error (response: $response)');
     }
