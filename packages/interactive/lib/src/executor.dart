@@ -95,7 +95,7 @@ class Executor {
         writer(responseString);
       }
     } else if (response is ErrorRef) {
-      print(response);
+      print(response.message);
     } else {
       log.warning('Unknown error (response: $response)');
     }
