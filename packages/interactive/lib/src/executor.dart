@@ -67,10 +67,11 @@ class Executor {
     log.info('Phase: Parse');
     final parsedInput = inputParser.parse(rawInput);
     if (parsedInput == null) return;
-    workspaceCode = workspaceCode.merge(parsedInput);
+    // keep the old workspace code where it is incase the new one triggers an error
+    final newWorkspaceCode = workspaceCode.merge(parsedInput);
 
     log.info('Phase: Write');
-    _writeWorkspaceCode(workspaceCode, workspaceFileTree);
+    _writeWorkspaceCode(newWorkspaceCode, workspaceFileTree);
 
     log.info('Phase: ReloadSources');
     final report = await vm.vmService.reloadSources(workspaceIsolate.isolateId, packagesUri: workspaceFileTree.packages.uri.toString());
@@ -79,7 +80,7 @@ class Executor {
         print(report.json?['notices'][0]['message']);
       return;
     }
-
+    workspaceCode = newWorkspaceCode;
     log.info('Phase: Evaluate');
     final isolateInfo = await workspaceIsolate.isolateInfo;
     final targetId = isolateInfo.rootLib!.id!;
