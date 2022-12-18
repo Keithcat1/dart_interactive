@@ -75,8 +75,8 @@ class Executor {
     log.info('Phase: ReloadSources');
     final report = await vm.vmService.reloadSources(workspaceIsolate.isolateId, packagesUri: workspaceFileTree.packages.uri.toString());
     if (report.success != true) {
-      log.warning(
-          'Error: Hot reload failed, maybe because code has syntax error?');
+
+        print(report.json?['notices'][0]['message']);
       return;
     }
 
@@ -95,7 +95,7 @@ class Executor {
         writer(responseString);
       }
     } else if (response is ErrorRef) {
-      log.warning('Error: $response');
+      print(response.message);
     } else {
       log.warning('Unknown error (response: $response)');
     }
